@@ -1,40 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <checkstyle version="5.0">
- <file name="D:\Programs\IdeaProjects\rest\src\main\scala\com\changtu\rest\RestServiceActor.scala">
-  <error column="4" line="56" source="org.scalastyle.file.RegexChecker" severity="warning" message="Regular expression matched 'println'"/>
-  <error column="4" line="58" source="org.scalastyle.file.RegexChecker" severity="warning" message="Regular expression matched 'println'"/>
-  <error column="4" line="65" source="org.scalastyle.file.RegexChecker" severity="warning" message="Regular expression matched 'println'"/>
-  <error column="4" line="67" source="org.scalastyle.file.RegexChecker" severity="warning" message="Regular expression matched 'println'"/>
-  <error column="4" line="72" source="org.scalastyle.file.RegexChecker" severity="warning" message="Regular expression matched 'println'"/>
-  <error column="6" line="77" source="org.scalastyle.scalariform.PublicMethodsHaveTypeChecker" severity="warning" message="Public method must have explicit type"/>
-  <error column="6" line="82" source="org.scalastyle.scalariform.PublicMethodsHaveTypeChecker" severity="warning" message="Public method must have explicit type"/>
-  <error column="0" line="26" source="org.scalastyle.scalariform.UnderscoreImportChecker" severity="warning" message="Avoid wildcard imports"/>
-  <error column="0" line="27" source="org.scalastyle.scalariform.UnderscoreImportChecker" severity="warning" message="Avoid wildcard imports"/>
-  <error column="0" line="32" source="org.scalastyle.scalariform.UnderscoreImportChecker" severity="warning" message="Avoid wildcard imports"/>
-  <error column="0" line="33" source="org.scalastyle.scalariform.UnderscoreImportChecker" severity="warning" message="Avoid wildcard imports"/>
-  <error column="74" line="107" source="org.scalastyle.scalariform.MultipleStringLiteralsChecker" severity="warning" message="The string literal &quot;label_info&quot; appears 4 times in the file."/>
- </file>
- <file name="D:\Programs\IdeaProjects\rest\src\main\scala\com\changtu\rest\UserLabelDetailProtocol.scala">
-  <error line="1" source="org.scalastyle.file.HeaderMatchesChecker" severity="warning" message="Header does not match expected text"/>
-  <error source="org.scalastyle.file.NewLineAtEofChecker" severity="warning" message="File must end with newline character"/>
- </file>
- <file name="D:\Programs\IdeaProjects\rest\src\main\scala\com\changtu\rest\SprayHBase.scala">
-  <error line="1" source="org.scalastyle.file.HeaderMatchesChecker" severity="warning" message="Header does not match expected text"/>
-  <error column="7" line="6" source="org.scalastyle.scalariform.EmptyClassChecker" severity="warning" message="Redundant braces after class definition"/>
- </file>
- <file name="D:\Programs\IdeaProjects\rest\src\main\scala\com\changtu\hbase\HBaseUtils.scala">
-  <error column="4" line="45" source="org.scalastyle.file.RegexChecker" severity="warning" message="Regular expression matched 'println'"/>
-  <error column="4" line="47" source="org.scalastyle.file.RegexChecker" severity="warning" message="Regular expression matched 'println'"/>
-  <error column="4" line="54" source="org.scalastyle.file.RegexChecker" severity="warning" message="Regular expression matched 'println'"/>
-  <error column="4" line="56" source="org.scalastyle.file.RegexChecker" severity="warning" message="Regular expression matched 'println'"/>
- </file>
- <file name="D:\Programs\IdeaProjects\rest\src\main\scala\com\changtu\rest\UserLabelJsonProtocol.scala">
-  <error line="1" source="org.scalastyle.file.HeaderMatchesChecker" severity="warning" message="Header does not match expected text"/>
-  <error source="org.scalastyle.file.NewLineAtEofChecker" severity="warning" message="File must end with newline character"/>
- </file>
- <file name="D:\Programs\IdeaProjects\rest\src\main\scala\com\changtu\rest\Boot.scala">
-  <error column="66" line="38" source="org.scalastyle.scalariform.MagicNumberChecker" severity="warning" message="Magic Number"/>
-  <error source="org.scalastyle.file.NewLineAtEofChecker" severity="warning" message="File must end with newline character"/>
-  <error column="0" line="27" source="org.scalastyle.scalariform.UnderscoreImportChecker" severity="warning" message="Avoid wildcard imports"/>
- </file>
-</checkstyle>
+      
+    </checkstyle>

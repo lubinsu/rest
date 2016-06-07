@@ -22,15 +22,15 @@ package com.changtu.rest
   * 使用Spary提供rest服务接口，以此作为
   */
 
-import akka.actor.Actor
-import com.changtu.rest.UserLabelJsonProtocol._
-import com.changtu.rest.UserLabelDetailProtocol._
+import akka.actor.{ActorContext, Actor}
+import com.changtu.rest.UserLabelDetailProtocol.detailFormat
+import com.changtu.rest.UserLabelJsonProtocol.labelFormat
 import org.apache.hadoop.fs.Path
 import org.apache.hadoop.hbase.client.{ConnectionFactory, Get}
 import org.apache.hadoop.hbase.util.Bytes
 import org.apache.hadoop.hbase.{HBaseConfiguration, TableName}
-import spray.httpx.SprayJsonSupport._
-import spray.routing._
+import spray.httpx.SprayJsonSupport.sprayJsonMarshaller
+import spray.routing.HttpService
 
 class RestServiceActor extends Actor with HttpService {
 
@@ -52,34 +52,24 @@ class RestServiceActor extends Actor with HttpService {
 
   val labelString = TableName.valueOf("bi_user_label_string")
   val labelTable = connection.getTable(labelString)
-  if (admin.tableExists(labelString)) {
-    println("Table exist.")
-  } else {
-    println("Table does not exist.")
+  if (!admin.tableExists(labelString)) {
     System.exit(-1)
   }
 
   val userLabelDetail = TableName.valueOf("bi_user_label")
   val userLabelDetailTable = connection.getTable(userLabelDetail)
   if (admin.tableExists(userLabelDetail)) {
-    println("userLabelDetail exist.")
-  } else {
-    println("userLabelDetail does not exist.")
     System.exit(-1)
   }
 
-  //val result = table.get(new Get(Bytes.toBytes("1735909")))
-  //println(Bytes.toString(result.value()))
-  //admin.close()
-
   // required as implicit value for the HttpService
   // included from SJService
-  def actorRefFactory = context
+  def actorRefFactory: ActorContext = context
 
   // we don't create a receive function ourselve, but use
   // the runRoute function from the HttpService to create
   // one for us, based on the supplied routes.
-  def receive = runRoute(route0)
+  def receive: Actor.Receive = runRoute(route0)
 
   // handles the api path, we could also define these in separate files
   // this path response to get queries, and make a selection on the
@@ -104,10 +94,11 @@ class RestServiceActor extends Actor with HttpService {
 
           if (userLabelDetailTable.exists(new Get(Bytes.toBytes(message)))) {
             val details = userLabelDetailTable.get(new Get(Bytes.toBytes(message)))
-            val labelCode = Bytes.toString(details.getValue(Bytes.toBytes("label_info"), Bytes.toBytes("label_code")))
-            val createDt = Bytes.toString(details.getValue(Bytes.toBytes("label_info"), Bytes.toBytes("create_dt")))
-            val modifyDt = Bytes.toString(details.getValue(Bytes.toBytes("label_info"), Bytes.toBytes("modify_dt")))
-            val status = Bytes.toString(details.getValue(Bytes.toBytes("label_info"), Bytes.toBytes("status")))
+            val labelInfo = "label_info"
+            val labelCode = Bytes.toString(details.getValue(Bytes.toBytes(labelInfo), Bytes.toBytes("label_code")))
+            val createDt = Bytes.toString(details.getValue(Bytes.toBytes(labelInfo), Bytes.toBytes("create_dt")))
+            val modifyDt = Bytes.toString(details.getValue(Bytes.toBytes(labelInfo), Bytes.toBytes("modify_dt")))
+            val status = Bytes.toString(details.getValue(Bytes.toBytes(labelInfo), Bytes.toBytes("status")))
             UserLabelDetail(message
               , labelCode
               , createDt

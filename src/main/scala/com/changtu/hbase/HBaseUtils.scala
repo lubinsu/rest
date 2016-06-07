@@ -41,19 +41,13 @@ object HBaseUtils {
 
   val labelString = TableName.valueOf("bi_user_label_string")
   val labelTable = connection.getTable(labelString)
-  if (admin.tableExists(labelString)) {
-    println("Table exist.")
-  } else {
-    println("Table does not exist.")
+  if (!admin.tableExists(labelString)) {
     System.exit(-1)
   }
 
   val userLabelDetail = TableName.valueOf("bi_user_label")
   val userLabelDetailTable = connection.getTable(userLabelDetail)
-  if (admin.tableExists(userLabelDetail)) {
-    println("userLabelDetail exist.")
-  } else {
-    println("userLabelDetail does not exist.")
+  if (!admin.tableExists(userLabelDetail)) {
     System.exit(-1)
   }
 }
