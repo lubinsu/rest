@@ -115,7 +115,6 @@ object HBaseUtils {
 
   def main(args: Array[String]) {
     val columnFamilies = labelTable.getTableDescriptor.getColumnFamilies.map( p => p.getNameAsString)
-    val scan = getScan(columnFamilies)
     val value = get(getGet("872547", columnFamilies)).getValue(Bytes.toBytes("labels"), Bytes.toBytes(""))
     println(Bytes.toString(value))
     //printVerboseQueryInfo(scan)

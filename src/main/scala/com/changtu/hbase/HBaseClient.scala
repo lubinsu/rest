@@ -22,12 +22,13 @@ package com.changtu.hbase
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.fs.Path
 import org.apache.hadoop.hbase.{CellUtil, TableName, HBaseConfiguration}
-import org.apache.hadoop.hbase.client._
+import org.apache.hadoop.hbase.client.{ConnectionFactory, Scan, Get, Result, Table, Delete, Put}
 import org.apache.hadoop.hbase.filter.CompareFilter.CompareOp
 import org.apache.hadoop.hbase.filter.{ColumnPrefixFilter, CompareFilter, Filter, FilterList, FirstKeyOnlyFilter, KeyOnlyFilter, PageFilter, PrefixFilter, RegexStringComparator, RowFilter, SingleColumnValueFilter}
 import org.apache.hadoop.hbase.util.Bytes
 
 import scala.collection.JavaConversions._
+
 
 class HBaseClient(config: Configuration = HBaseConfiguration.create(), tablePath: String,
                   columnFamilies: TraversableOnce[String], limit: Option[Int] = None,
