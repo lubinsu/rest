@@ -82,7 +82,12 @@
             <artifactId>scalaz-core_2.10</artifactId>
             <version>7.1.0</version>
         </dependency>
-
+        <!-- http://mvnrepository.com/artifact/com.twitter/util-logging_2.10 -->
+        <dependency>
+            <groupId>com.twitter</groupId>
+            <artifactId>util-logging_2.10</artifactId>
+            <version>6.34.0</version>
+        </dependency>
     </dependencies>
 
     <build>

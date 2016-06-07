@@ -116,5 +116,13 @@
     <orderEntry type="library" name="Maven: org.specs2:specs2-matcher_2.10:2.3.11" level="project" />
     <orderEntry type="library" name="Maven: org.specs2:specs2-common_2.10:2.3.11" level="project" />
     <orderEntry type="library" name="Maven: org.scalaz:scalaz-core_2.10:7.1.0" level="project" />
+    <orderEntry type="library" name="Maven: com.twitter:util-logging_2.10:6.34.0" level="project" />
+    <orderEntry type="library" name="Maven: com.twitter:util-core_2.10:6.34.0" level="project" />
+    <orderEntry type="library" name="Maven: com.twitter:util-function_2.10:6.34.0" level="project" />
+    <orderEntry type="library" name="Maven: com.twitter:jsr166e:1.0.0" level="project" />
+    <orderEntry type="library" name="Maven: com.twitter:util-app_2.10:6.34.0" level="project" />
+    <orderEntry type="library" name="Maven: com.twitter:util-registry_2.10:6.34.0" level="project" />
+    <orderEntry type="library" name="Maven: com.twitter:util-stats_2.10:6.34.0" level="project" />
+    <orderEntry type="library" name="Maven: com.twitter:util-lint_2.10:6.34.0" level="project" />
   </component>
 </module>

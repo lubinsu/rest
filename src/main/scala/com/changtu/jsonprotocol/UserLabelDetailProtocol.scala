@@ -13,16 +13,16 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-package com.changtu.rest
-
-/**
-  * Created by lubinsu on 2016/6/2.
-  * 用户标签信息，生成JSON串的协议接口
-  */
+package com.changtu.jsonprotocol
 
 import spray.json.DefaultJsonProtocol
 
-object UserLabelJsonProtocol extends DefaultJsonProtocol {
-  implicit val labelFormat = jsonFormat3(UserLabels)
+/**
+  * Created by lubinsu on 2016/6/3.
+  * 用户标签详细信息，生成JSON串的协议接口
+  */
+object UserLabelDetailProtocol extends DefaultJsonProtocol {
+  implicit val detailFormat = jsonFormat6(UserLabelDetail)
 }
-case class UserLabels(userId: String, labels: String, errorCode: Int)
+
+case class UserLabelDetail(userLabelId: String, labelCode: String, createDt: String, modifyDt: String, status: String, errorCode: Int)
