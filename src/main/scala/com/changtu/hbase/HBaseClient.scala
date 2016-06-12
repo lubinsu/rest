@@ -1,18 +1,3 @@
-// Copyright (C) 2011-2012 the original author or authors.
-// See the LICENCE.txt file distributed with this work for additional
-// information regarding copyright ownership.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
 package com.changtu.hbase
 
 /**
@@ -24,7 +9,12 @@ import org.apache.hadoop.fs.Path
 import org.apache.hadoop.hbase.{CellUtil, TableName, HBaseConfiguration}
 import org.apache.hadoop.hbase.client.{ConnectionFactory, Scan, Get, Result, Table, Delete, Put}
 import org.apache.hadoop.hbase.filter.CompareFilter.CompareOp
-import org.apache.hadoop.hbase.filter.{ColumnPrefixFilter, CompareFilter, Filter, FilterList, FirstKeyOnlyFilter, KeyOnlyFilter, PageFilter, PrefixFilter, RegexStringComparator, RowFilter, SingleColumnValueFilter}
+import org.apache.hadoop.hbase.filter.
+{
+ColumnPrefixFilter, CompareFilter, Filter, FilterList,
+FirstKeyOnlyFilter, KeyOnlyFilter, PageFilter, PrefixFilter,
+RegexStringComparator, RowFilter, SingleColumnValueFilter
+}
 import org.apache.hadoop.hbase.util.Bytes
 
 import scala.collection.JavaConversions._
@@ -33,6 +23,7 @@ import scala.collection.JavaConversions._
 class HBaseClient(config: Configuration = HBaseConfiguration.create(), tablePath: String,
                   columnFamilies: TraversableOnce[String], limit: Option[Int] = None,
                   verboseMode: Boolean = false, caching: Int = 5000) {
+
   val Log = com.twitter.logging.Logger.get()
 
   try {
@@ -243,7 +234,6 @@ class HBaseClient(config: Configuration = HBaseConfiguration.create(), tablePath
 
   def insert(rowKey: String, columnGroup: String, columnName: String, columnValue: String): Unit = {
     val htable = getHtable
-    //Log.info("Storing into " + Bytes.toString(htable.getTableName()) + " the following cell: (" + rowKey + "," + columnGroup + ":" + columnName + "=" + columnValue + ")")
     val row1 = Bytes.toBytes(rowKey)
     val p1 = new Put(row1)
 
