@@ -5,10 +5,12 @@ import org.scalatest.{FlatSpec, Matchers}
 
 /**
   * Created by lubinsu on 2016/6/11.
+  * 测试 HDFS client工具类
   */
 class HDFSClientSpec extends FlatSpec with Matchers {
 
-  "Result" should "equal(132335)" in {
-    HDFSClient.countLines("hdfs://nameservice1/user/hadoop/behavior/20160612/09") should be(132335)
+  "HDFS client" should "create a file then delete it" in {
+    HDFSClient.createDirectory("/user/hadoop/biglog/test", deleteF = true) should be(true)
+    HDFSClient.release()
   }
 }
