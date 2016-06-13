@@ -9,7 +9,7 @@ import org.scalatest.{FlatSpec, Matchers}
   */
 class HDFSClientSpec extends FlatSpec with Matchers {
 
-  "HDFS client" should "create a file then delete it" in {
+  "HDFS client" should "create a file" in {
     HDFSClient.createDirectory("/user/hadoop/biglog/test", deleteF = true) should be(true)
     HDFSClient.release()
   }
