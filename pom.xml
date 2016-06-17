@@ -34,8 +34,8 @@
 
     <distributionManagement>
         <repository>
-            <id>rest-repository</id>
-            <name>rest Repository</name>
+            <id>proficio-repository</id>
+            <name>Proficio Repository</name>
             <url>file://${basedir}/target/deploy</url>
         </repository>
     </distributionManagement>
@@ -161,7 +161,6 @@
             <plugin>
                 <groupId>net.alchim31.maven</groupId>
                 <artifactId>scala-maven-plugin</artifactId>
-                <version>3.2.2</version>
                 <configuration>
                     <compilerPlugins>
                         <compilerPlugin>
@@ -205,7 +204,6 @@
             <plugin>
                 <groupId>org.scala-tools</groupId>
                 <artifactId>maven-scala-plugin</artifactId>
-                <version>2.9.1</version>
                 <executions>
                     <execution>
                         <goals>
@@ -215,7 +213,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <!--<scalaVersion>${scala.version}</scalaVersion>-->
+                    <scalaVersion>${scala.version}</scalaVersion>
                     <args>
                         <arg>-target:jvm-1.5</arg>
                     </args>
@@ -224,7 +222,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-eclipse-plugin</artifactId>
-                <version>2.9</version>
                 <configuration>
                     <downloadSources>true</downloadSources>
                     <buildcommands>
@@ -239,10 +236,9 @@
                     </classpathContainers>
                 </configuration>
             </plugin>
-            <!--<plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
-                <version>2.9</version>
                 <executions>
                     <execution>
                         <id>copy-dependencies</id>
@@ -262,7 +258,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>3.0.1</version>
                 <configuration>
                     <archive>
                         <manifest>
@@ -272,7 +267,7 @@
                         </manifest>
                     </archive>
                 </configuration>
-            </plugin>-->
+            </plugin>
 
             <plugin>
                 <groupId>org.scalastyle</groupId>
@@ -304,9 +299,9 @@
             <plugin>
                 <groupId>org.scala-tools</groupId>
                 <artifactId>maven-scala-plugin</artifactId>
-                <!--<configuration>
+                <configuration>
                     <scalaVersion>${scala.version}</scalaVersion>
-                </configuration>-->
+                </configuration>
             </plugin>
         </plugins>
     </reporting>
