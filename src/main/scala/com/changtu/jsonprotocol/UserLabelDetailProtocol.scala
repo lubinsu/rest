@@ -10,4 +10,7 @@ object UserLabelDetailProtocol extends DefaultJsonProtocol {
   implicit val detailFormat = jsonFormat6(UserLabelDetail)
 }
 
-case class UserLabelDetail(userLabelId: String, labelCode: String, createDt: String, modifyDt: String, status: String, errorCode: Int)
+case class UserLabelDetail(userLabelId: String
+                           , labelCode: String, createDt: String
+                           , modifyDt: String, status: String
+                           , errorCode: Int)
