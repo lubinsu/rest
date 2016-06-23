@@ -8,6 +8,7 @@ package com.changtu.rest
   */
 
 import akka.actor.{Actor, ActorContext}
+import akka.cluster.Cluster
 import com.changtu.jsonprotocol.UserLabelDetailProtocol.detailFormat
 import com.changtu.jsonprotocol.UserLabelJsonProtocol.labelFormat
 import com.changtu.jsonprotocol.{UserLabelDetail, UserLabels}
@@ -27,6 +28,8 @@ class RestServiceActor extends Actor with HttpService {
   // required as implicit value for the HttpService
   // included from SJService
   def actorRefFactory: ActorContext = context
+
+  val cluster = Cluster(context.system)
 
   // we don't create a receive function ourselve, but use
   // the runRoute function from the HttpService to create
