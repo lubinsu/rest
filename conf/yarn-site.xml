@@ -11,28 +11,92 @@
     <value>*</value>
   </property>
   <property>
-    <name>yarn.resourcemanager.address</name>
+    <name>yarn.resourcemanager.ha.enabled</name>
+    <value>true</value>
+  </property>
+  <property>
+    <name>yarn.resourcemanager.ha.automatic-failover.enabled</name>
+    <value>true</value>
+  </property>
+  <property>
+    <name>yarn.resourcemanager.ha.automatic-failover.embedded</name>
+    <value>true</value>
+  </property>
+  <property>
+    <name>yarn.resourcemanager.recovery.enabled</name>
+    <value>true</value>
+  </property>
+  <property>
+    <name>yarn.resourcemanager.zk-address</name>
+    <value>bigdata4:2181,bigdata1:2181,bigdata2:2181</value>
+  </property>
+  <property>
+    <name>yarn.resourcemanager.store.class</name>
+    <value>org.apache.hadoop.yarn.server.resourcemanager.recovery.ZKRMStateStore</value>
+  </property>
+  <property>
+    <name>yarn.client.failover-sleep-base-ms</name>
+    <value>100</value>
+  </property>
+  <property>
+    <name>yarn.client.failover-sleep-max-ms</name>
+    <value>2000</value>
+  </property>
+  <property>
+    <name>yarn.resourcemanager.cluster-id</name>
+    <value>yarnRM</value>
+  </property>
+  <property>
+    <name>yarn.resourcemanager.address.rm185</name>
     <value>bigdata1:8032</value>
   </property>
   <property>
-    <name>yarn.resourcemanager.admin.address</name>
-    <value>bigdata1:8033</value>
-  </property>
-  <property>
-    <name>yarn.resourcemanager.scheduler.address</name>
+    <name>yarn.resourcemanager.scheduler.address.rm185</name>
     <value>bigdata1:8030</value>
   </property>
   <property>
-    <name>yarn.resourcemanager.resource-tracker.address</name>
+    <name>yarn.resourcemanager.resource-tracker.address.rm185</name>
     <value>bigdata1:8031</value>
   </property>
   <property>
-    <name>yarn.resourcemanager.webapp.address</name>
+    <name>yarn.resourcemanager.admin.address.rm185</name>
+    <value>bigdata1:8033</value>
+  </property>
+  <property>
+    <name>yarn.resourcemanager.webapp.address.rm185</name>
     <value>bigdata1:8088</value>
   </property>
   <property>
-    <name>yarn.resourcemanager.webapp.https.address</name>
+    <name>yarn.resourcemanager.webapp.https.address.rm185</name>
     <value>bigdata1:8090</value>
+  </property>
+  <property>
+    <name>yarn.resourcemanager.address.rm311</name>
+    <value>bigdata3:8032</value>
+  </property>
+  <property>
+    <name>yarn.resourcemanager.scheduler.address.rm311</name>
+    <value>bigdata3:8030</value>
+  </property>
+  <property>
+    <name>yarn.resourcemanager.resource-tracker.address.rm311</name>
+    <value>bigdata3:8031</value>
+  </property>
+  <property>
+    <name>yarn.resourcemanager.admin.address.rm311</name>
+    <value>bigdata3:8033</value>
+  </property>
+  <property>
+    <name>yarn.resourcemanager.webapp.address.rm311</name>
+    <value>bigdata3:8088</value>
+  </property>
+  <property>
+    <name>yarn.resourcemanager.webapp.https.address.rm311</name>
+    <value>bigdata3:8090</value>
+  </property>
+  <property>
+    <name>yarn.resourcemanager.ha.rm-ids</name>
+    <value>rm185,rm311</value>
   </property>
   <property>
     <name>yarn.resourcemanager.client.thread-count</name>

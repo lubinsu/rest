@@ -1,6 +1,7 @@
+// Copyright (C) 2015-2016 the original author or authors.
 package com.changtu
 
-import com.changtu.hdfs.HDFSClient
+import com.changtu.utils.hdfs.HDFSClient
 import org.scalatest.{FlatSpec, Matchers}
 
 /**

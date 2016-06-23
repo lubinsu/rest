@@ -11,10 +11,8 @@ import akka.actor.{Actor, ActorContext}
 import com.changtu.jsonprotocol.UserLabelDetailProtocol.detailFormat
 import com.changtu.jsonprotocol.UserLabelJsonProtocol.labelFormat
 import com.changtu.jsonprotocol.{UserLabelDetail, UserLabels}
-import org.apache.hadoop.fs.Path
-import org.apache.hadoop.hbase.client.{ConnectionFactory, Get, Table}
+import com.changtu.utils.hbase.HBaseClient
 import org.apache.hadoop.hbase.util.Bytes
-import org.apache.hadoop.hbase.{HBaseConfiguration, TableName}
 import spray.httpx.SprayJsonSupport.sprayJsonMarshaller
 import spray.routing.HttpService
 
@@ -22,32 +20,9 @@ class RestServiceActor extends Actor with HttpService {
 
   val Log = com.twitter.logging.Logger.get()
   //创建HBASE连接
-  val config = HBaseConfiguration.create()
+  val labelStr = new HBaseClient(tablePath = "bi_user_label_string")
+  val labelDtl = new HBaseClient(tablePath = "bi_user_label")
 
-  try {
-    config.addResource(new Path("E:\\conf\\hbase-site.xml"))
-    config.addResource(new Path("E:\\conf\\core-site.xml"))
-  } catch {
-    case e: IllegalArgumentException =>
-      config.addResource(new Path("/appl/conf/hbase-site.xml"))
-      config.addResource(new Path("/appl/conf/core-site.xml"))
-  }
-
-  val connection = ConnectionFactory.createConnection(config)
-  val admin = connection.getAdmin
-
-
-  val labelString = TableName.valueOf("bi_user_label_string")
-  val labelTable = connection.getTable(labelString)
-  if (!admin.tableExists(labelString)) {
-    System.exit(-1)
-  }
-
-  val userLabelDetail = TableName.valueOf("bi_user_label")
-  val userLabelDetailTable = connection.getTable(userLabelDetail)
-  if (admin.tableExists(userLabelDetail)) {
-    System.exit(-1)
-  }
 
   // required as implicit value for the HttpService
   // included from SJService
@@ -60,9 +35,12 @@ class RestServiceActor extends Actor with HttpService {
 
 
   // 获取某个用户的标签列表
-  def getLabels(labelTable: Table, message: String): UserLabels = {
-    if (labelTable.exists(new Get(Bytes.toBytes(message)))) {
-      val labels = Bytes.toString(labelTable.get(new Get(Bytes.toBytes(message))).value())
+  def getLabels(message: String): UserLabels = {
+    val get = labelStr.getGet(message)
+
+    if (labelStr.table.exists(get)) {
+      val value = labelStr.get(get).getValue(Bytes.toBytes("labels"), Bytes.toBytes(""))
+      val labels = Bytes.toString(value)
       UserLabels(message, labels, 0)
     } else {
       UserLabels(message, "", -1)
@@ -70,10 +48,12 @@ class RestServiceActor extends Actor with HttpService {
   }
 
   // 获取标签的详细信息
-  def getLabelDetails(userLabelDetailTable: Table, message: String): UserLabelDetail = {
+  def getLabelDetails(message: String): UserLabelDetail = {
 
-    if (userLabelDetailTable.exists(new Get(Bytes.toBytes(message)))) {
-      val details = userLabelDetailTable.get(new Get(Bytes.toBytes(message)))
+    val get = labelDtl.getGet(message)
+
+    if (labelDtl.table.exists(get)) {
+      val details = labelDtl.get(get)
       val labelInfo = "label_info"
       val labelCode = Bytes.toString(details.getValue(Bytes.toBytes(labelInfo), Bytes.toBytes("label_code")))
       val createDt = Bytes.toString(details.getValue(Bytes.toBytes(labelInfo), Bytes.toBytes("create_dt")))
@@ -99,7 +79,7 @@ class RestServiceActor extends Actor with HttpService {
   val route0 = path("userlabel" / Segment) {
     message => get {
       complete {
-        getLabels(labelTable, message)
+        getLabels(message)
       }
     }
   } ~
@@ -107,16 +87,17 @@ class RestServiceActor extends Actor with HttpService {
     path("userlabeldetail" / Segment) {
       message => get {
         complete {
-          getLabelDetails(userLabelDetailTable, message)
-        }
-      }
-    } ~
-    // 查询详细信息
-    path("label" / Segment) {
-      message => get {
-        complete {
-          getLabelDetails(userLabelDetailTable, message)
+          getLabelDetails(message)
         }
       }
     }
+  /* ~
+      // 查询详细信息
+      path("label" / Segment) {
+        message => get {
+          complete {
+            getLabelDetails(userLabelDetailTable, message)
+          }
+        }
+      }*/
 }
