@@ -9,6 +9,7 @@ import scala.collection.mutable.ListBuffer
 import akka.actor.Actor
 import akka.actor.ActorRef
 import akka.actor.Props
+import akka.routing.ConsistentHashingRouter.ConsistentHashableEnvelope
 import akka.routing.FromConfig
 
 sealed class Helper(count: Int, replyTo: ActorRef) extends Actor {
@@ -32,6 +33,7 @@ class Master extends Actor {
     case StartFind(start: Int, end: Int, replyTo: ActorRef) if start > 1 && end >= start =>
       val count = end - start + 1
       val helper = context.actorOf(Props(new Helper(count, replyTo)))
-      (start to end).foreach(num => worker ! Work(num, helper))
+//      (start to end).foreach(num => worker ! Work(num, helper))
+      (start to end).foreach(num => worker.tell(ConsistentHashableEnvelope(Work(num,helper), num), helper))
   }
 }

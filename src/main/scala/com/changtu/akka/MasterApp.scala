@@ -2,7 +2,7 @@
 package com.changtu.akka
 
 /**
-  * Created by 6526 on 6/22/2016.
+  * Created by lubinsu on 6/22/2016.
   */
 import java.io.File
 
@@ -12,7 +12,9 @@ import akka.actor.ActorRef
 import akka.actor.ActorSelection.toScala
 import akka.actor.ActorSystem
 import akka.actor.Props
+import akka.cluster.Cluster
 import akka.kernel.Bootable
+import com.changtu.rest.RestServiceActor
 
 class Agent extends Actor {
   var master = context.system.actorSelection("/user/master")
@@ -28,7 +30,8 @@ class MasterDaemon extends Bootable {
   val system = ActorSystem("MasterApp", ConfigFactory.parseFile(new File(confHome + "/application.conf")).getConfig("RemoteSys"))
 
 //  val system = ActorSystem("MasterApp", ConfigFactory.load.getConfig("remote"))
-  val master = system.actorOf(Props[Master], "master")
+  val agent = system.actorOf(Props[Master], "master")
+  Cluster(system).registerOnMemberUp(agent)
 
   def startup() = {}
   def shutdown() = {
