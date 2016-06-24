@@ -7,25 +7,27 @@ package com.changtu.akka
 
 import java.io.File
 
-import akka.actor.{Actor, ActorSystem, Props}
+import akka.actor.{ActorSystem, Props}
+import akka.io.IO
+import akka.pattern.ask
+import akka.util.Timeout
 import com.typesafe.config.ConfigFactory
+import spray.can.Http
 
-object PerfectNumber {
+import scala.concurrent.duration.DurationInt
 
-  def main(args: Array[String]): Unit = {
+object PerfectNumber extends App {
 
-    val confHome = if (System.getenv("CONF_HOME") == "") "/appl/conf" else System.getenv("CONF_HOME")
-    val system = ActorSystem("MasterApp", ConfigFactory.parseFile(new File(confHome + "/application.conf")).getConfig("RemoteSys"))
+  // create our actor system with the name com.changtu.rest
+  //implicit val system = ActorSystem("com-changtu-rest")
+  val confHome = if (System.getenv("CONF_HOME") == "") "/appl/conf" else System.getenv("CONF_HOME")
+  implicit val system = ActorSystem("MasterApp", ConfigFactory.parseFile(new File(confHome + "/application.conf")).getConfig("MainSys"))
 
-    system.actorOf(Props(new Actor() {
-      context.system.actorOf(Props[ClusterClient], "remoteMaster") ! StartFind(2, 100, self)
+  val service = system.actorOf(Props[PathSender], "changtu-rest-service")
 
-      def receive = {
-        case PerfectNumbers(list: List[Int]) =>
-          println("\nFound Perfect Numbers:" + list.mkString(","))
-          system.shutdown()
-      }
-    }))
-
-  }
+  // IO requires an implicit ActorSystem, and ? requires an implicit timeout
+  // Bind HTTP to the specified service.
+  implicit val timeout = Timeout(5.seconds)
+  val port = 9993
+  IO(Http) ? Http.Bind(service, interface = "172.18.5.119", port = port)
 }

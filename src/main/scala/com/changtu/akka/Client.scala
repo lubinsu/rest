@@ -28,7 +28,7 @@ class Client extends Actor {
 
   @throws[Exception](classOf[Exception])
   override def preStart(): Unit = {
-    remoteActor = context.actorSelection("akka.tcp://lubinsu@172.18.5.119:2555/user/server")
+    remoteActor = context.actorSelection("akka.tcp://lubinsu@172.18.5.119:2600/user/server")
     println("远程服务端地址 : " + remoteActor)
   }
 

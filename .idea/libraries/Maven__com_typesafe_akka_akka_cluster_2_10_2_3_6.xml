@@ -8,6 +8,7 @@
     </JAVADOC>
     <SOURCES>
       <root url="jar://$MAVEN_REPOSITORY$/com/typesafe/akka/akka-cluster_2.10/2.3.6/akka-cluster_2.10-2.3.6-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.ideaLibSources/akka-cluster_2.10-2.3.6-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

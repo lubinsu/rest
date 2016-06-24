@@ -41,7 +41,7 @@ object Server {
           enabled-transports = ["akka.remote.netty.tcp"]
           netty.tcp {
             hostname = "172.18.5.119"
-            port = 2555
+            port = 2600
           }
         }
       }
