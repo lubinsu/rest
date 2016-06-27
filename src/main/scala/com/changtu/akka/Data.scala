@@ -17,7 +17,7 @@ case class WorkMsg(message: String, replyTo: ActorRef) extends Message
 
 case class Result(num: Int, isPerfect: Boolean) extends Message
 
-case class ResultMsg(msg: String) extends Message
+case class ResultMsg(msg: String, replyTo: ActorRef) extends Message
 
 case class PerfectNumbers(list: List[Int]) extends Message
 

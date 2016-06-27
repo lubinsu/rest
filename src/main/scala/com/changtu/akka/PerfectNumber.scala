@@ -19,11 +19,10 @@ import scala.concurrent.duration.DurationInt
 object PerfectNumber extends App {
 
   // create our actor system with the name com.changtu.rest
-  //implicit val system = ActorSystem("com-changtu-rest")
   val confHome = if (System.getenv("CONF_HOME") == "") "/appl/conf" else System.getenv("CONF_HOME")
   implicit val system = ActorSystem("MasterApp", ConfigFactory.parseFile(new File(confHome + "/application.conf")).getConfig("MainSys"))
 
-  val service = system.actorOf(Props[PathSender], "changtu-rest-service")
+  val service = system.actorOf(Props[PathSender], "remoteMaster")
 
   // IO requires an implicit ActorSystem, and ? requires an implicit timeout
   // Bind HTTP to the specified service.

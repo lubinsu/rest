@@ -11,7 +11,8 @@ import akka.actor.{Actor, ActorRef}
 class Worker extends Actor {
   def receive = {
     case WorkMsg(message: String, replyTo: ActorRef) =>
-      replyTo ! ResultMsg("Got ".concat(message))
+      replyTo ! ResultMsg("Got ".concat(message), replyTo: ActorRef)
+      println("Worker:" + message)
       print("[" + message + "] ")
   }
 }

@@ -13,8 +13,8 @@ import spray.routing.HttpService
 sealed class Helper(msg: String, replyTo: ActorRef) extends Actor {
 
   def receive = {
-    case ResultMsg(msg: String) =>
-        replyTo ! ResultMsg(msg: String)
+    case ResultMsg(msg: String, replyTo: ActorRef) =>
+        replyTo ! ResultMsg(msg: String, replyTo: ActorRef)
   }
 }
 
@@ -54,8 +54,11 @@ class Master extends Actor with HttpService {
   def receive = {
 
     case MessageFind(message: String, resultTo: ActorRef) =>
-      val helper = context.actorOf(Props(new Helper(message, resultTo)))
-      worker.tell(ConsistentHashableEnvelope(WorkMsg(message,helper), message.toLong), helper)
+      //val helper = context.actorOf(Props(new Helper(message, resultTo)))
+      //println("Master:" + message)
+      println("Sender:" + resultTo)
+      resultTo ! ResultMsg(message: String, resultTo: ActorRef)
+      //worker.tell(ConsistentHashableEnvelope(WorkMsg(message,helper), message.toLong), helper)
 
   }
 }

@@ -16,6 +16,7 @@ import akka.cluster.ClusterEvent.MemberEvent
 import akka.cluster.ClusterEvent.MemberRemoved
 import akka.cluster.ClusterEvent.MemberUp
 import akka.cluster.MemberStatus
+
 import scala.concurrent.forkjoin.ThreadLocalRandom
 
 class ClusterClient extends Actor {
@@ -51,17 +52,20 @@ class ClusterClient extends Actor {
       println("node size:" + nodes.size)
       nodes.size match {
         case x: Int if x < 1 =>
-          Thread.sleep(1000)
+          Thread.sleep(500)
           self ! MessageFind(message, resultTo)
         case _ =>
           val address = nodes.toIndexedSeq(ThreadLocalRandom.current.nextInt(nodes.size))
           val service = context.actorSelection(RootActorPath(address) / servicePathElements)
           service ! MessageFind(message, resultTo)
+          println("ClusterClient:" + resultTo)
           println("send to :" + address)
       }
-    case msg: ResultMsg =>
-      println(msg.msg)
-      /*cluster.down(self.path.address)
+    /*case ResultMsg(msg: String, replyTo: ActorRef) =>
+      println("ClusterClientResult:" + msg)
+      println("ClusterClientSender:" + replyTo)
+      replyTo ! ResultMsg(msg: String, replyTo: ActorRef)
+      cluster.down(self.path.address)
       context.system.shutdown()*/
   }
 }
