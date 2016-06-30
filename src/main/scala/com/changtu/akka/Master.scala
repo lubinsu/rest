@@ -53,11 +53,11 @@ class Master extends Actor with HttpService {
 
   def receive = {
 
-    case MessageFind(message: String, resultTo: ActorRef) =>
+    case MessageFind2(message: String, resultTo: ActorRef, clientFrom: ActorRef) =>
       //val helper = context.actorOf(Props(new Helper(message, resultTo)))
       //println("Master:" + message)
-      println("Sender:" + resultTo)
-      resultTo ! ResultMsg(message: String, resultTo: ActorRef)
+      println("Master:" + clientFrom)
+      clientFrom ! ResultMsg("[" + message + "]", resultTo)
       //worker.tell(ConsistentHashableEnvelope(WorkMsg(message,helper), message.toLong), helper)
 
   }

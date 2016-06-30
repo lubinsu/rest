@@ -22,3 +22,5 @@ case class ResultMsg(msg: String, replyTo: ActorRef) extends Message
 case class PerfectNumbers(list: List[Int]) extends Message
 
 case class MessageFind(message: String, replyTo: ActorRef) extends Message
+
+case class MessageFind2(message: String, replyTo: ActorRef, clientFrom: ActorRef) extends Message

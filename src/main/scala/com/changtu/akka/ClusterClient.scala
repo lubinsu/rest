@@ -57,15 +57,16 @@ class ClusterClient extends Actor {
         case _ =>
           val address = nodes.toIndexedSeq(ThreadLocalRandom.current.nextInt(nodes.size))
           val service = context.actorSelection(RootActorPath(address) / servicePathElements)
-          service ! MessageFind(message, resultTo)
-          println("ClusterClient:" + resultTo)
+          service ! MessageFind2(message, resultTo, self)
+          println("PathSender:" + resultTo)
           println("send to :" + address)
       }
-    /*case ResultMsg(msg: String, replyTo: ActorRef) =>
+    case ResultMsg(msg: String, replyTo: ActorRef) =>
       println("ClusterClientResult:" + msg)
       println("ClusterClientSender:" + replyTo)
       replyTo ! ResultMsg(msg: String, replyTo: ActorRef)
-      cluster.down(self.path.address)
+      println("Sent success")
+      /*cluster.down(self.path.address)
       context.system.shutdown()*/
   }
 }

@@ -1,14 +1,12 @@
 package com.changtu.akka
 
-import akka.actor.{Actor, ActorContext, ActorRef, Props}
+import akka.actor.{Actor, ActorContext, Props}
 import akka.pattern.ask
 import akka.util.Timeout
 import spray.routing.HttpService
 
 import scala.concurrent.Await
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.DurationInt
-import scala.util.{Failure, Success}
 
 /**
   * Created by 6526 on 6/24/2016.
@@ -30,10 +28,11 @@ class PathSender extends Actor with HttpService {
       complete {
         println("Completed!!!")
         println("PathSender:" + message)
+        println("PathSender self:" + self)
         val clusterClient = system.actorOf(Props[ClusterClient], "remoteSender")
-        val future = clusterClient ? MessageFind(message, clusterClient)
+        val future = clusterClient ? MessageFind(message, self)
         println("future:" + future)
-        val rst = future.onComplete {
+        /*val rst = future.onComplete {
           case Success(ResultMsg(msg: String, replyTo: ActorRef)) =>
             println(msg)
             msg
@@ -45,11 +44,11 @@ class PathSender extends Actor with HttpService {
             println("Got result msg :" + result.msg)
             result.msg*/
           case _ => "None"
-        }
+        }*/
         val result = Await.result(future, timeout.duration).asInstanceOf[ResultMsg]
         println(result.msg)
         result.msg
-//        rst.toString
+        //        rst.toString
       }
     }
   }
