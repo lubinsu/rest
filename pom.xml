@@ -169,6 +169,11 @@
         </dependency>
         <dependency>
             <groupId>org.apache.spark</groupId>
+            <artifactId>spark-streaming-kafka_${scala.bigVersion}</artifactId>
+            <version>1.6.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.spark</groupId>
             <artifactId>spark-core_${scala.bigVersion}</artifactId>
             <version>1.6.0</version>
         </dependency>
