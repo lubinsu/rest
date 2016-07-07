@@ -6,13 +6,13 @@ package com.changtu.akka
   *
   */
 
-import akka.actor.{Actor, ActorRef}
+import akka.actor.Actor
 
 class Worker extends Actor {
   def receive = {
-    case WorkMsg(message: String, replyTo: ActorRef) =>
-      replyTo ! ResultMsg("Got ".concat(message), replyTo: ActorRef)
-      println("Worker:" + message)
-      print("[" + message + "] ")
+    case MessageFind3(message: String) =>
+      sender() ! ResultMsg2("Got ".concat(message))
+    /*println("Worker:" + message)
+    print("[" + message + "] ")*/
   }
 }

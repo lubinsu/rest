@@ -19,8 +19,12 @@ case class Result(num: Int, isPerfect: Boolean) extends Message
 
 case class ResultMsg(msg: String, replyTo: ActorRef) extends Message
 
+case class ResultMsg2(msg: String) extends Message
+
 case class PerfectNumbers(list: List[Int]) extends Message
 
 case class MessageFind(message: String, replyTo: ActorRef) extends Message
 
 case class MessageFind2(message: String, replyTo: ActorRef, clientFrom: ActorRef) extends Message
+
+case class MessageFind3(message: String) extends Message

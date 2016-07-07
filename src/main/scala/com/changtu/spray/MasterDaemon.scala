@@ -1,5 +1,5 @@
 // Copyright (C) 2015-2016 the original author or authors.
-package com.changtu.akka
+package com.changtu.spray
 
 /**
   * Created by lubinsu on 6/22/2016.
@@ -15,11 +15,11 @@ import akka.kernel.Bootable
 
 class MasterDaemon extends Bootable {
 
-  val confHome = if (System.getenv("CONF_HOME") == "" | System.getenv("CONF_HOME") == null) "/appl/conf" else System.getenv("CONF_HOME")
-  implicit val system = ActorSystem("MasterApp", ConfigFactory.parseFile(new File(confHome + "/application.conf")).getConfig("RemoteSys"))
+  val confHome = if (System.getenv("CONF_HOME") == "") "/appl/conf" else System.getenv("CONF_HOME")
+  implicit val system = ActorSystem("RemoteCluster", ConfigFactory.parseFile(new File(confHome + "/application.conf")).getConfig("RemoteSys"))
 
 //  val system = ActorSystem("MasterApp", ConfigFactory.load.getConfig("remote"))
-  val agent = system.actorOf(Props[Master], "agent")
+  val agent = system.actorOf(Props[MainCluster], "agent")
   Cluster(system).registerOnMemberUp(agent)
 
   def startup() = {}
@@ -28,7 +28,7 @@ class MasterDaemon extends Bootable {
   }
 }
 
-object MasterApp {
+object MasterDaemon {
   def main(args: Array[String]) {
     new MasterDaemon()
   }

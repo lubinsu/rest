@@ -2,17 +2,25 @@
   <dictionary name="6526">
     <words>
       <w>acks</w>
+      <w>biglog</w>
       <w>changtu</w>
       <w>colobu</w>
+      <w>dowork</w>
+      <w>getenv</w>
       <w>hashable</w>
       <w>hbase</w>
       <w>jappender</w>
       <w>jsonprotocol</w>
+      <w>lebel</w>
       <w>msgs</w>
       <w>partitioner</w>
       <w>proficio</w>
+      <w>recv</w>
+      <w>serializaing</w>
+      <w>spraysample</w>
       <w>typesafe</w>
       <w>userlabels</w>
+      <w>woot</w>
     </words>
   </dictionary>
 </component>
