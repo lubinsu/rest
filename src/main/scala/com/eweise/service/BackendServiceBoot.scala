@@ -14,7 +14,7 @@ import duration._
  */
 object BackendServiceBoot extends App {
 
-  implicit val timeout = Timeout(10 seconds)
+  implicit val timeout = Timeout(10.seconds)
 
   val confHome = if (System.getenv("CONF_HOME") == "" | System.getenv("CONF_HOME") == null) "/appl/conf" else System.getenv("CONF_HOME")
   val config = ConfigFactory.parseString(s"akka.remote.netty.tcp.port=${args(0)}")

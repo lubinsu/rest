@@ -10,14 +10,13 @@ import kafka.producer.{KeyedMessage, Producer, ProducerConfig}
 
 import scala.util.Random
 
-
 class KafkaProducer {
 
   def sendMsg(): Unit = {
 
 
     val events = 100
-    val topic = "snoopy"
+    val topic = "test"
     val brokers = "bigdata3:9092,bigdata5:9092,bigdata6:9092"
     val rnd = new Random()
     val props = new Properties()

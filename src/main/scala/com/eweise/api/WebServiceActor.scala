@@ -6,6 +6,7 @@ import akka.contrib.pattern.DistributedPubSubMediator.Send
 import akka.pattern._
 import akka.util.Timeout
 import com.changtu.jsonprotocol.UserLabels
+import com.eweise.service.BusScenic
 import org.json4s.{DefaultFormats, Formats}
 import spray.httpx.Json4sSupport
 import spray.routing.HttpService
@@ -37,8 +38,8 @@ class WebServiceActor extends Actor with HttpService {
   val route =
     path("userlabel") {
       get {
-        parameters('userId) { (userId) =>
-          onComplete(mediator ? Send("/user/backend-service", userId, localAffinity = false)) {
+        parameters('userId, 'labelCode) { (userId, labelCode) =>
+          onComplete(mediator ? Send("/user/backend-service", BusScenic(userId, labelCode), localAffinity = false)) {
             case Success(value) =>
               complete(value.asInstanceOf[UserLabels])
             case Failure(e) =>

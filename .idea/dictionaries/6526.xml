@@ -9,16 +9,20 @@
       <w>getenv</w>
       <w>hashable</w>
       <w>hbase</w>
+      <w>hmmss</w>
       <w>jappender</w>
       <w>jsonprotocol</w>
       <w>lebel</w>
       <w>msgs</w>
       <w>partitioner</w>
       <w>proficio</w>
+      <w>realtimeordersummary</w>
       <w>recv</w>
+      <w>scalastyle</w>
       <w>serializaing</w>
       <w>spraysample</w>
       <w>typesafe</w>
+      <w>unisound</w>
       <w>userlabels</w>
       <w>woot</w>
     </words>

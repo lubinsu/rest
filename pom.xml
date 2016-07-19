@@ -12,11 +12,6 @@
     </properties>
 
     <repositories>
-        <repository>
-            <id>scala-tools.org</id>
-            <name>Scala-Tools Maven2 Repository</name>
-            <url>http://scala-tools.org/repo-releases</url>
-        </repository>
 
         <repository>
             <id>typesafe</id>
@@ -29,6 +24,23 @@
             <name>Artima Maven Repository</name>
             <url>http://repo.typesafe.com/typesafe/releases/</url>
         </repository>
+
+        <repository>
+            <id>scala-tools.org</id>
+            <name>Scala-Tools Maven2 Repository</name>
+            <url>http://scala-tools.org/repo-releases</url>
+        </repository>
+
+        <!--<repository>
+            <id>cloudera</id>
+            <url>https://repository.cloudera.com/artifactory/cloudera-repos</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>-->
     </repositories>
 
     <pluginRepositories>
@@ -65,24 +77,24 @@
         </dependency>
 
         <!-- kafka 依赖包 -->
-        <dependency>
+        <!--<dependency>
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka-clients</artifactId>
-            <version>0.9.0.0</version>
+            <version>0.8.2.1</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka_${scala.bigVersion}</artifactId>
-            <version>0.9.0.0</version>
-        </dependency>
+            <version>0.8.2.1</version>
+        </dependency>-->
 
         <!-- https://mvnrepository.com/artifact/org.apache.kafka/kafka-log4j-appender -->
-        <dependency>
+        <!--<dependency>
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka-log4j-appender</artifactId>
             <version>0.9.0.0</version>
-        </dependency>
+        </dependency>-->
 
         <!-- scala 类库 -->
         <dependency>
@@ -187,7 +199,7 @@
             <artifactId>spark-streaming-kafka_${scala.bigVersion}</artifactId>
             <version>1.6.0</version>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-core_${scala.bigVersion}</artifactId>
             <version>1.6.0</version>
@@ -196,7 +208,7 @@
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-sql_${scala.bigVersion}</artifactId>
             <version>1.6.0</version>
-        </dependency>
+        </dependency>-->
 
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -354,6 +366,40 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <!-- 依赖打包插件
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.4.3</version>
+                <configuration>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <artifactSet>
+                                <includes>
+                                    <include>org.apache.spark:spark-streaming-kafka_${scala.bigVersion}</include>
+                                </includes>
+                            </artifactSet>
+                            <filters>
+                                <filter>
+                                    <artifact>com.unisound.dcs:*</artifact>
+                                    <excludes>
+                                        <exclude>**/*.xml</exclude>
+                                        <exclude>**/*.properties</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            -->
         </plugins>
     </build>
     <reporting>

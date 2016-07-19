@@ -6,7 +6,6 @@ package com.changtu.kafka
 
 import java.util.Properties
 import java.util.concurrent._
-
 import kafka.consumer.{Consumer, ConsumerConfig, KafkaStream}
 import kafka.utils.Logging
 
@@ -53,7 +52,7 @@ class KafkaConsumer(val zookeeper: String,
 }
 
 object ScalaConsumerExample extends App {
-  val example = new KafkaConsumer("bigdata1,bigdata2,bigdata4", "group2", "biglog", 10)
+  val example = new KafkaConsumer("bigdata1,bigdata2,bigdata4", "group2", "test", 10)
   example.run(10)
 }
 
