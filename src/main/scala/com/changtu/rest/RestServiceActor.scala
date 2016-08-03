@@ -12,7 +12,7 @@ import akka.cluster.Cluster
 import com.changtu.jsonprotocol.UserLabelDetailProtocol.detailFormat
 import com.changtu.jsonprotocol.UserLabelJsonProtocol.labelFormat
 import com.changtu.jsonprotocol.{UserLabelDetail, UserLabels}
-import com.changtu.utils.hbase.HBaseClient
+import com.changtu.util.hbase.HBaseClient
 import org.apache.hadoop.hbase.util.Bytes
 import spray.httpx.SprayJsonSupport.sprayJsonMarshaller
 import spray.routing.HttpService

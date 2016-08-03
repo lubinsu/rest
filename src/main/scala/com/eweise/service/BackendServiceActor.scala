@@ -4,7 +4,7 @@ import akka.actor.{Actor, ActorLogging}
 import akka.contrib.pattern.DistributedPubSubExtension
 import akka.contrib.pattern.DistributedPubSubMediator.Put
 import com.changtu.jsonprotocol.UserLabels
-import com.changtu.utils.hbase.HBaseClient
+import com.changtu.util.hbase.HBaseClient
 import org.apache.hadoop.hbase.util.Bytes
 
 @SerialVersionUID(1L)
@@ -21,7 +21,6 @@ class BackendServiceActor extends Actor with ActorLogging {
 
   //创建HBASE连接
   val labelStr = new HBaseClient(tablePath = "bi_user_label_code_string")
-  val labelDtl = new HBaseClient(tablePath = "bi_user_label")
   mediator ! Put(self)
 
   def receive = {
@@ -44,5 +43,6 @@ class BackendServiceActor extends Actor with ActorLogging {
     } else {
       UserLabels(busScenic.userId, "", -1)
     }
+    // UserLabels(busScenic.userId, "", -1)
   }
 }

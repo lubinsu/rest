@@ -12,7 +12,13 @@ import scala.concurrent.duration
 import duration._
 object ApiBoot extends App {
 
-  implicit val timeout = Timeout(10 seconds)
+  if (args.length < 2) {
+    System.err.println("Usage: com.eweise.api.ApiBoot <hostname> <port>")
+    System.exit(1)
+  }
+
+  val Array(hostname, port) = args
+  implicit val timeout = Timeout(100 seconds)
 
   val confHome = if (System.getenv("CONF_HOME") == "" | System.getenv("CONF_HOME") == null) "/appl/conf" else System.getenv("CONF_HOME")
 
@@ -27,5 +33,5 @@ object ApiBoot extends App {
 
   val apiRoutes = actorSystem.actorOf(Props[WebServiceActor], "api-routes")
 
-  IO(Http) ! Http.Bind(apiRoutes, interface = "hadoop.slave2", port=9993)
+  IO(Http) ! Http.Bind(apiRoutes, interface = hostname, port=port.toInt)
 }

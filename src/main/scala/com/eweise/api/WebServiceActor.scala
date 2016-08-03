@@ -1,6 +1,6 @@
 package com.eweise.api
 
-import akka.actor.Actor
+import akka.actor.{Actor, ActorLogging}
 import akka.contrib.pattern.DistributedPubSubExtension
 import akka.contrib.pattern.DistributedPubSubMediator.Send
 import akka.pattern._
@@ -23,7 +23,7 @@ object JsonProtocol extends Json4sSupport {
   implicit def json4sFormats: Formats = DefaultFormats
 }
 
-class WebServiceActor extends Actor with HttpService {
+class WebServiceActor extends Actor with HttpService with ActorLogging{
 
   import JsonProtocol._
 
@@ -39,6 +39,7 @@ class WebServiceActor extends Actor with HttpService {
     path("userlabel") {
       get {
         parameters('userId, 'labelCode) { (userId, labelCode) =>
+          log.info("hello".concat(labelCode))
           onComplete(mediator ? Send("/user/backend-service", BusScenic(userId, labelCode), localAffinity = false)) {
             case Success(value) =>
               complete(value.asInstanceOf[UserLabels])
