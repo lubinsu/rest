@@ -1,12 +1,12 @@
-package com.eweise.api
+package com.changtu.api
 
 import akka.actor.{Actor, ActorLogging}
 import akka.contrib.pattern.DistributedPubSubExtension
 import akka.contrib.pattern.DistributedPubSubMediator.Send
 import akka.pattern._
 import akka.util.Timeout
-import com.changtu.jsonprotocol.UserLabels
-import com.eweise.service.BusScenic
+import com.changtu.core.UserLabels
+import com.changtu.service.BusScenic
 import org.json4s.{DefaultFormats, Formats}
 import spray.httpx.Json4sSupport
 import spray.routing.HttpService

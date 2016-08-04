@@ -1,6 +1,7 @@
-package com.eweise.service
+package com.changtu.service
 
 import java.io.File
+import java.net.InetAddress
 
 import akka.actor.{ActorSystem, Props}
 import akka.util.Timeout
@@ -15,9 +16,23 @@ import duration._
 object BackendServiceBoot extends App {
 
   implicit val timeout = Timeout(10.seconds)
-
+  val port = args(0)
+  val hostName = InetAddress.getLocalHost.getHostName
   val confHome = if (System.getenv("CONF_HOME") == "" | System.getenv("CONF_HOME") == null) "/appl/conf" else System.getenv("CONF_HOME")
-  val config = ConfigFactory.parseString(s"akka.remote.netty.tcp.port=${args(0)}")
+  val config = ConfigFactory.parseString(s"""
+    akka {
+      loglevel = INFO
+      actor {
+        provider = "akka.cluster.ClusterActorRefProvider"
+      }
+      remote {
+        netty.tcp {
+          hostname = "$hostName"
+          port = "$port"
+        }
+      }
+    }
+    """)
     .withFallback(ConfigFactory.parseFile(new File(confHome + "/application.conf")))
 
   implicit val actorSystem = ActorSystem("cluster-example", config)

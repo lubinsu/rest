@@ -1,47 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <checkstyle version="5.0">
- <file name="E:\IdeaProjects\rest\src\main\scala\com\changtu\akkaTest\TestActor.scala">
-  <error column="19" line="18" source="org.scalastyle.scalariform.MagicNumberChecker" severity="warning" message="Please don't use magic numbers"/>
+ <file name="E:\IdeaProjects\rest\src\main\scala\com\changtu\service\BackendServiceActor.scala">
   <error line="1" source="org.scalastyle.file.HeaderMatchesChecker" severity="warning" message="Header does not match expected text"/>
  </file>
- <file name="E:\IdeaProjects\rest\src\main\scala\com\eweise\service\BackendServiceBoot.scala">
+ <file name="E:\IdeaProjects\rest\src\main\scala\com\changtu\core\UserLabelJsonProtocol.scala">
   <error line="1" source="org.scalastyle.file.HeaderMatchesChecker" severity="warning" message="Header does not match expected text"/>
  </file>
- <file name="E:\IdeaProjects\rest\src\main\scala\com\changtu\akka\PathSender.scala">
+ <file name="E:\IdeaProjects\rest\src\main\scala\com\changtu\service\BackendServiceBoot.scala">
   <error line="1" source="org.scalastyle.file.HeaderMatchesChecker" severity="warning" message="Header does not match expected text"/>
  </file>
- <file name="E:\IdeaProjects\rest\src\main\scala\com\changtu\spray\IoService.scala">
+ <file name="E:\IdeaProjects\rest\src\main\scala\com\changtu\api\WebServiceActor.scala">
   <error line="1" source="org.scalastyle.file.HeaderMatchesChecker" severity="warning" message="Header does not match expected text"/>
  </file>
- <file name="E:\IdeaProjects\rest\src\main\scala\com\changtu\spray\MainCluster.scala">
-  <error line="1" source="org.scalastyle.file.HeaderMatchesChecker" severity="warning" message="Header does not match expected text"/>
- </file>
- <file name="E:\IdeaProjects\rest\src\main\scala\com\changtu\kafka\KafkaProducer.scala">
-  <error column="42" line="37" source="org.scalastyle.scalariform.MagicNumberChecker" severity="warning" message="Please don't use magic numbers"/>
-  <error column="19" line="40" source="org.scalastyle.scalariform.MagicNumberChecker" severity="warning" message="Please don't use magic numbers"/>
-  <error line="1" source="org.scalastyle.file.HeaderMatchesChecker" severity="warning" message="Header does not match expected text"/>
- </file>
- <file name="E:\IdeaProjects\rest\src\main\scala\com\changtu\kafka\KafkaConsumer.scala">
-  <error column="82" line="55" source="org.scalastyle.scalariform.MagicNumberChecker" severity="warning" message="Please don't use magic numbers"/>
-  <error column="14" line="56" source="org.scalastyle.scalariform.MagicNumberChecker" severity="warning" message="Please don't use magic numbers"/>
-  <error line="1" source="org.scalastyle.file.HeaderMatchesChecker" severity="warning" message="Header does not match expected text"/>
- </file>
- <file name="E:\IdeaProjects\rest\src\main\scala\com\changtu\akka\ClusterClient.scala">
-  <error column="23" line="55" source="org.scalastyle.scalariform.MagicNumberChecker" severity="warning" message="Please don't use magic numbers"/>
-  <error line="1" source="org.scalastyle.file.HeaderMatchesChecker" severity="warning" message="Header does not match expected text"/>
- </file>
- <file name="E:\IdeaProjects\rest\src\main\scala\com\eweise\api\WebServiceActor.scala">
-  <error line="1" source="org.scalastyle.file.HeaderMatchesChecker" severity="warning" message="Header does not match expected text"/>
- </file>
- <file name="E:\IdeaProjects\rest\src\main\scala\com\eweise\api\ApiBoot.scala">
-  <error line="1" source="org.scalastyle.file.HeaderMatchesChecker" severity="warning" message="Header does not match expected text"/>
- </file>
- <file name="E:\IdeaProjects\rest\src\main\scala\com\eweise\service\BackendServiceActor.scala">
-  <error line="1" source="org.scalastyle.file.HeaderMatchesChecker" severity="warning" message="Header does not match expected text"/>
- </file>
- <file name="E:\IdeaProjects\rest\src\main\scala\com\changtu\streaming\KafkaWordCount.scala">
-  <error column="50" line="29" source="org.scalastyle.scalariform.MagicNumberChecker" severity="warning" message="Please don't use magic numbers"/>
-  <error column="62" line="29" source="org.scalastyle.scalariform.MagicNumberChecker" severity="warning" message="Please don't use magic numbers"/>
+ <file name="E:\IdeaProjects\rest\src\main\scala\com\changtu\api\ApiBoot.scala">
   <error line="1" source="org.scalastyle.file.HeaderMatchesChecker" severity="warning" message="Header does not match expected text"/>
  </file>
 </checkstyle>

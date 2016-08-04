@@ -1,4 +1,4 @@
-package com.eweise.api
+package com.changtu.api
 
 import java.io.File
 
@@ -13,7 +13,7 @@ import duration._
 object ApiBoot extends App {
 
   if (args.length < 2) {
-    System.err.println("Usage: com.eweise.api.ApiBoot <hostname> <port>")
+    System.err.println("Usage: com.changtu.api.ApiBoot <hostname> <port>")
     System.exit(1)
   }
 

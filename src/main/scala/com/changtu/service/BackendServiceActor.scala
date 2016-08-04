@@ -1,19 +1,16 @@
-package com.eweise.service
+package com.changtu.service
 
 import akka.actor.{Actor, ActorLogging}
 import akka.contrib.pattern.DistributedPubSubExtension
 import akka.contrib.pattern.DistributedPubSubMediator.Put
-import com.changtu.jsonprotocol.UserLabels
+import com.changtu.core.UserLabels
 import com.changtu.util.hbase.HBaseClient
 import org.apache.hadoop.hbase.util.Bytes
 
 @SerialVersionUID(1L)
 sealed trait Message
 
-case class PerformWork(msg: String) extends Message
 case class BusScenic(userId: String, labelCode: String) extends Message
-
-case object OK extends Message
 
 class BackendServiceActor extends Actor with ActorLogging {
 
@@ -24,9 +21,6 @@ class BackendServiceActor extends Actor with ActorLogging {
   mediator ! Put(self)
 
   def receive = {
-    case PerformWork(message) =>
-      log.info("Backend Service is performing some work")
-      sender() ! message
     case BusScenic(userId, labelCode) =>
       log.info("Backend Service is querying user's labels:" + userId)
       sender() ! getLabels(BusScenic(userId, labelCode))
