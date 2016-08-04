@@ -18,7 +18,7 @@ object ApiBoot extends App {
   }
 
   val Array(hostname, port) = args
-  implicit val timeout = Timeout(100 seconds)
+  implicit val timeout = Timeout(5 seconds)
 
   val confHome = if (System.getenv("CONF_HOME") == "" | System.getenv("CONF_HOME") == null) "/appl/conf" else System.getenv("CONF_HOME")
 
