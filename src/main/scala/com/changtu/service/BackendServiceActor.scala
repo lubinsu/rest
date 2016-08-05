@@ -37,6 +37,5 @@ class BackendServiceActor extends Actor with ActorLogging {
     } else {
       UserLabels(busScenic.userId, "", -1)
     }
-    // UserLabels(busScenic.userId, "", -1)
   }
 }

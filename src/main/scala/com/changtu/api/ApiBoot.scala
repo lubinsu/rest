@@ -1,6 +1,7 @@
 package com.changtu.api
 
 import java.io.File
+import java.net.InetAddress
 
 import akka.actor.{ActorSystem, Props}
 import akka.io.IO
@@ -18,11 +19,28 @@ object ApiBoot extends App {
   }
 
   val Array(hostname, port) = args
+
+  val seedHost = InetAddress.getLocalHost.getHostName
+
+
   implicit val timeout = Timeout(5 seconds)
 
   val confHome = if (System.getenv("CONF_HOME") == "" | System.getenv("CONF_HOME") == null) "/appl/conf" else System.getenv("CONF_HOME")
 
-  val config = ConfigFactory.parseString("akka.remote.netty.tcp.port=2551")
+  val config = ConfigFactory.parseString(s"""
+    akka {
+      loglevel = INFO
+      actor {
+        provider = "akka.cluster.ClusterActorRefProvider"
+      }
+      remote {
+        netty.tcp {
+          hostname = "$seedHost"
+          port = "2551"
+        }
+      }
+    }
+    """)
     .withFallback(ConfigFactory.parseFile(new File(confHome + "/application.conf")))
 
   /**

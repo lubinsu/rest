@@ -55,9 +55,9 @@ class WebServiceActor extends Actor with HttpService with ActorLogging{
             case Success(value) =>
               complete(value.asInstanceOf[UserLabels])
             case Failure(e) =>
-              complete(e.getMessage)
+              complete(e.getMessage.concat(" when getting userId:").concat(userId))
             case _ =>
-              complete("unknown error.")
+              complete("unknown error.".concat(" when getting userId:").concat(userId))
           }
         }
       }
