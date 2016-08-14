@@ -1,0 +1,7 @@
+# simple password-based config
+host-name = bigdata1
+login-type = password
+username = hadoop
+password = 0(s6bXju
+command-timeout = 5000
+enable-compression = yes
