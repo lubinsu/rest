@@ -66,7 +66,7 @@
         <dependency>
             <groupId>com.changtu</groupId>
             <artifactId>platform</artifactId>
-            <version>1.1</version>
+            <version>1.1.1</version>
         </dependency>
 
         <!-- json4s -->
