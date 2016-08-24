@@ -20,7 +20,7 @@ object ApiBoot extends App {
 
   val Array(hostname, port) = args
 
-  val seedHost = InetAddress.getLocalHost.getHostName
+  val seedHost = InetAddress.getLocalHost.getHostAddress
 
 
   implicit val timeout = Timeout(5 seconds)

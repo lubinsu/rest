@@ -9,6 +9,13 @@
  <file name="E:\IdeaProjects\rest\src\main\scala\com\changtu\service\BackendServiceBoot.scala">
   <error line="1" source="org.scalastyle.file.HeaderMatchesChecker" severity="warning" message="Header does not match expected text"/>
  </file>
+ <file name="E:\IdeaProjects\rest\src\main\scala\com\changtu\api\ApiCheck.scala">
+  <error column="19" line="67" source="org.scalastyle.scalariform.MagicNumberChecker" severity="warning" message="Please don't use magic numbers"/>
+  <error column="19" line="95" source="org.scalastyle.scalariform.MagicNumberChecker" severity="warning" message="Please don't use magic numbers"/>
+  <error line="68" source="org.scalastyle.file.FileLineLengthChecker" severity="warning" message="File line length exceeds 160 characters"/>
+  <error line="96" source="org.scalastyle.file.FileLineLengthChecker" severity="warning" message="File line length exceeds 160 characters"/>
+  <error line="1" source="org.scalastyle.file.HeaderMatchesChecker" severity="warning" message="Header does not match expected text"/>
+ </file>
  <file name="E:\IdeaProjects\rest\src\main\scala\com\changtu\api\WebServiceActor.scala">
   <error line="1" source="org.scalastyle.file.HeaderMatchesChecker" severity="warning" message="Header does not match expected text"/>
  </file>

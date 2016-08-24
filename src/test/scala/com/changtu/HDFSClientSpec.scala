@@ -13,5 +13,6 @@ class HDFSClientSpec extends FlatSpec with Matchers {
   "HDFS client" should "create a file" in {
     HDFSUtils.createDirectory("/user/hadoop/test", deleteF = true) should be(true)
     HDFSUtils.release()
+
   }
 }
