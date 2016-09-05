@@ -47,7 +47,7 @@ object ApiBoot extends App {
    * All actors that want to belong to the same cluster need to use the same
    * ActorSystem name
    */
-  implicit val actorSystem = ActorSystem("cluster-example", config)
+  implicit val actorSystem = ActorSystem("cluster-risk-control", config)
 
   val apiRoutes = actorSystem.actorOf(Props[WebServiceActor], "api-routes")
 

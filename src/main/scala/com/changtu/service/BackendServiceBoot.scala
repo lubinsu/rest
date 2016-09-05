@@ -5,6 +5,7 @@ import java.net.InetAddress
 
 import akka.actor.{ActorSystem, Props}
 import akka.util.Timeout
+import com.changtu.api.ApiBoot._
 import com.typesafe.config.ConfigFactory
 
 import scala.concurrent.duration
@@ -14,6 +15,11 @@ import duration._
  * Pass in the port as first argument so that we can run many backend services
  */
 object BackendServiceBoot extends App {
+
+  if (args.length < 1) {
+    System.err.println("Usage: com.changtu.service.BackendServiceBoot <port>")
+    System.exit(1)
+  }
 
   implicit val timeout = Timeout(5.seconds)
   val port = args(0)
@@ -35,6 +41,6 @@ object BackendServiceBoot extends App {
     """)
     .withFallback(ConfigFactory.parseFile(new File(confHome + "/application.conf")))
 
-  implicit val actorSystem = ActorSystem("cluster-example", config)
+  implicit val actorSystem = ActorSystem("cluster-risk-control", config)
   actorSystem.actorOf(Props[BackendServiceActor], "backend-service")
 }
