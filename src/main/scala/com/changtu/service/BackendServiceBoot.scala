@@ -5,15 +5,13 @@ import java.net.InetAddress
 
 import akka.actor.{ActorSystem, Props}
 import akka.util.Timeout
-import com.changtu.api.ApiBoot._
 import com.typesafe.config.ConfigFactory
 
-import scala.concurrent.duration
-import duration._
+import scala.concurrent.duration._
 
 /**
- * Pass in the port as first argument so that we can run many backend services
- */
+  * Pass in the port as first argument so that we can run many backend services
+  */
 object BackendServiceBoot extends App {
 
   if (args.length < 1) {
@@ -25,7 +23,8 @@ object BackendServiceBoot extends App {
   val port = args(0)
   val hostName = InetAddress.getLocalHost.getHostName
   val confHome = if (System.getenv("CONF_HOME") == "" | System.getenv("CONF_HOME") == null) "/appl/conf" else System.getenv("CONF_HOME")
-  val config = ConfigFactory.parseString(s"""
+  val config = ConfigFactory.parseString(
+    s"""
     akka {
       loglevel = INFO
       actor {

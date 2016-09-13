@@ -4,6 +4,7 @@
       <w>acks</w>
       <w>biglog</w>
       <w>changtu</w>
+      <w>chuangjiaredis</w>
       <w>colobu</w>
       <w>djava</w>
       <w>dowork</w>
@@ -28,6 +29,8 @@
       <w>loglevel</w>
       <w>msgs</w>
       <w>nohup</w>
+      <w>oper</w>
+      <w>orcl</w>
       <w>ordersubmit</w>
       <w>partitioner</w>
       <w>payreturn</w>

@@ -18,7 +18,7 @@ class HDFSClientSpec extends FlatSpec with Matchers {
 
   "JSON test" should "get Object" in {
 
-    val url = parseURL("garbage").map(_.getProtocol)
-    println(url)
+    val url = parseURL("http://www.changtu.com/chepiao/tonganqu-wenzhoushi.html") getOrElse new URL("http://duckduckgo.com")
+    println(url.toString)
   }
 }

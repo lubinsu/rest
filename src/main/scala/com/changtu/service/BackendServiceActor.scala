@@ -5,9 +5,14 @@ import akka.contrib.pattern.DistributedPubSubExtension
 import akka.contrib.pattern.DistributedPubSubMediator.Put
 import com.changtu.core.{ResultMsg, _}
 import com.changtu.util.hbase.HBaseClient
+import com.changtu.util.redis.RedisUtils
+import org.apache.hadoop.hbase.filter.CompareFilter.CompareOp
+import org.apache.hadoop.hbase.filter._
 import org.apache.hadoop.hbase.util.Bytes
-import org.json4s.{DefaultFormats, Extraction, Formats}
+import org.joda.time.DateTime
+import org.joda.time.format.DateTimeFormat
 import org.json4s.jackson.JsonMethods._
+import org.json4s.{DefaultFormats, Extraction, Formats}
 import spray.httpx.Json4sSupport
 
 import scala.collection.mutable.ArrayBuffer
@@ -23,6 +28,7 @@ object JsonProtocol extends Json4sSupport {
   //  implicit def fooFormat: Formats = DefaultFormats
   implicit def json4sFormats: Formats = DefaultFormats
 }
+
 /**
   * 微服务后台接口
   * 1.车景套餐相关
@@ -31,10 +37,37 @@ object JsonProtocol extends Json4sSupport {
 class BackendServiceActor extends Actor with ActorLogging {
 
   import JsonProtocol._
+
+  // 时间格式隐式转换
+  val formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
+  val redisClient = new RedisUtils("redis.server.test.1")
+  implicit def str2date(str: String): DateTime = DateTime.parse(str, formatter)
+
   val mediator = DistributedPubSubExtension(context.system).mediator
+  // 创建redis连接
+  //val r = new RedisClient("172.19.3.62", 45001)
   //创建HBASE连接
   val labelStr = new HBaseClient(tablePath = "bi_user_label_code_string")
-  val blackList = new HBaseClient(tablePath = "bi_ods_coa_mbl_exce_mgr")
+
+  // 过滤条件
+  val labelFilter = new FilterList(FilterList.Operator.MUST_PASS_ALL)
+  labelFilter.addFilter(scvf("labels", "", CompareOp.NOT_EQUAL, "13"))
+  labelFilter.addFilter(scvf("labels", "", CompareOp.NOT_EQUAL, "14"))
+
+  val blackList = new HBaseClient(tablePath = "afs_member_lists")
+  val blackFilter = new FilterList(FilterList.Operator.MUST_PASS_ALL)
+  blackFilter.addFilter(scvf("p", "flag", CompareOp.EQUAL, "Y"))
+
+
+  val abnormalPayIdList = new HBaseClient(tablePath = "bi_feature_library_pay_id")
+
+  // 过滤条件
+  val abnormalFilter = new FilterList(FilterList.Operator.MUST_PASS_ALL)
+  abnormalFilter.addFilter(scvf("p", "type", CompareOp.NOT_EQUAL, "4"))
+  abnormalFilter.addFilter(scvf("p", "type", CompareOp.NOT_EQUAL, "5"))
+  abnormalFilter.addFilter(scvf("p", "type", CompareOp.NOT_EQUAL, "7"))
+  abnormalFilter.addFilter(scvf("p", "type", CompareOp.NOT_EQUAL, "0"))
+
   mediator ! Put(self)
 
   /**
@@ -47,7 +80,6 @@ class BackendServiceActor extends Actor with ActorLogging {
       * 车景套餐接口
       */
     case BusScenic(userId, labelCode) =>
-//      val result = getLabels(BusScenic(userId, labelCode)).getOrElse(UserLabels(userId, "", -1))
       val result = getLabels(BusScenic(userId, labelCode)) match {
         case Success(userLabels) =>
           log.info("[userLabels] [SUCCESS] ".concat(compact(render(Extraction.decompose(userLabels)))))
@@ -75,7 +107,7 @@ class BackendServiceActor extends Actor with ActorLogging {
       sender() ! result
 
     /**
-      * 注册风险该控制
+      * 注册风险控制
       */
     case register: Register =>
       val result = registerValid(register) match {
@@ -93,13 +125,31 @@ class BackendServiceActor extends Actor with ActorLogging {
       * 保存订单风险控制
       */
     case orderSubmit: OrderSubmit =>
-      sender() ! orderSubmitValid(orderSubmit)
+      val result = orderSubmitValid(orderSubmit) match {
+        case Success(returnMsg) =>
+          log.info("[orderSubmit] [SUCCESS] ".concat(compact(render(Extraction.decompose(returnMsg)))))
+          returnMsg
+        case Failure(f) =>
+          val returnMsg = ReturnMsg("BIG_DATA_ERR_00004", "orderSubmit validate error.".concat(f.getMessage), ArrayBuffer.empty[ResultMsg])
+          log.error("[orderSubmit] [ERROR] ".concat(compact(render(Extraction.decompose(returnMsg)))))
+          returnMsg
+      }
+      sender() ! result
 
     /**
       * 支付返回风险控制
       */
     case payReturn: PayReturn =>
-      sender() ! payReturnValid(payReturn)
+      val result = payReturnValid(payReturn) match {
+        case Success(returnMsg) =>
+          log.info("[payReturn] [SUCCESS] ".concat(compact(render(Extraction.decompose(returnMsg)))))
+          returnMsg
+        case Failure(f) =>
+          val returnMsg = ReturnMsg("BIG_DATA_ERR_00005", "payReturn validate error.".concat(f.getMessage), ArrayBuffer.empty[ResultMsg])
+          log.error("[payReturn] [ERROR] ".concat(compact(render(Extraction.decompose(returnMsg)))))
+          returnMsg
+      }
+      sender() ! result
   }
 
   /**
@@ -128,12 +178,12 @@ class BackendServiceActor extends Actor with ActorLogging {
     * 1.白名单用户ID匹配
     *
     * 2.代购用户ID匹配
-    *   同程代购	01
-    *   携程代购	02
-    *   12308代购	03
-    *   去哪儿代购	04
-    *   未知代购	05
-    *   下单数量异常	06
+    * 同程代购	01
+    * 携程代购	02
+    * 12308代购	03
+    * 去哪儿代购	04
+    * 未知代购	05
+    * 下单数量异常	06
     *
     * @param login 登录参数
     * @return 返回风险评估结果
@@ -143,32 +193,30 @@ class BackendServiceActor extends Actor with ActorLogging {
       val rs = ArrayBuffer.empty[ResultMsg]
 
       // 1.白名单用户ID匹配
-      // TODO
-      checkWhiteList(login.userId)
-      // 2.代购用户ID匹配
-      val get = labelStr.getGet(login.userId.concat("_").concat("abnormal_order_class"))
+      if (!checkWhiteList(login.userId)) {
+        // 2.代购用户ID匹配
+        val get = labelStr.getGet(login.userId.concat("_").concat("abnormal_order_class")).setFilter(labelFilter)
 
-      if (labelStr.table.exists(get)) {
-        val value = labelStr.get(get).getValue(Bytes.toBytes("labels"), Bytes.toBytes(""))
-        val labels = Bytes.toString(value)
+        if (labelStr.table.exists(get)) {
+          val value = labelStr.get(get).getValue(Bytes.toBytes("labels"), Bytes.toBytes(""))
+          val labels = Bytes.toString(value)
 
-        labels.split(",").foreach( label => {
-          rs += ResultMsg("02", label match {
-            case "10" => "02" // 携程
-            case "11" => "04" // 去哪儿
-            case "12" => "03" // 12308
-            case "13" => "05" // 逍遥行商旅网
-            case "14" => "05" // 我要买票网
-            case "15" => "01" // 同程网
+          labels.split(",").foreach(label => {
+            rs += ResultMsg("02", label match {
+              case "10" => "02" // 携程
+              case "11" => "04" // 去哪儿
+              case "12" => "03" // 12308
+              case "15" => "01" // 同程网
+              case _ => "05"
+            })
           })
-
-        })
-
-      } else {
-        rs += ResultMsg("01", "01")
+        } else {
+          rs += ResultMsg("01", "01")
+        }
       }
 
-      ReturnMsg("0", "成功返回", rs)
+      // 返回结果
+      returnMsg(rs)
     }
 
   }
@@ -184,14 +232,25 @@ class BackendServiceActor extends Actor with ActorLogging {
 
     Try {
       val rs = ArrayBuffer.empty[ResultMsg]
-      val get = blackList.getGet(register.smsMobile)
+      // WHITE_${INFO_TYPE}_${USER_INFO}
+      // BLACK_${INFO_TYPE}_${USER_INFO}
+      // BLACK_2_13001212547
+      // 目前只验证手机号
+      val get = blackList.getGet("BLACK_2_".concat(register.smsMobile)).setFilter(blackFilter)
       if (blackList.table.exists(get)) {
-        rs += ResultMsg("03", "01")
+
+        val start = blackList.get(get).getValue(Bytes.toBytes("p"), Bytes.toBytes("st"))
+        val end = blackList.get(get).getValue(Bytes.toBytes("p"), Bytes.toBytes("en"))
+
+        // 判断是否在生效时间内
+        if (effectTime(Bytes.toString(start), Bytes.toString(end))) rs += ResultMsg("03", "01")
+
       } else {
         rs += ResultMsg("01", "01")
       }
 
-      ReturnMsg("0", "成功返回", rs)
+      // 返回结果
+      returnMsg(rs)
     }
 
   }
@@ -199,19 +258,48 @@ class BackendServiceActor extends Actor with ActorLogging {
   /**
     * 保存订单风险验证
     *
+    * 1.白名单用户
+    * 2.用户ID是否代购账号
+    *
     * @param orderSubmit 保存订单参数
     * @return 返回风险评估结果
     */
   private[service] def orderSubmitValid(orderSubmit: OrderSubmit): Try[ReturnMsg] = {
     Try {
       val rs = ArrayBuffer.empty[ResultMsg]
-      rs += ResultMsg("riskClass_".concat(orderSubmit.userId), "riskLevelId_1".concat(orderSubmit.userId))
-      ReturnMsg("0", "测试用例", rs)
+      //  1.白名单用户
+      //  2.用户ID是否代购账号
+      if (!checkWhiteList(orderSubmit.userId)) {
+        val get = labelStr.getGet(orderSubmit.userId.concat("_").concat("abnormal_order_class")).setFilter(labelFilter)
+        if (labelStr.table.exists(get)) {
+          val value = labelStr.get(get).getValue(Bytes.toBytes("labels"), Bytes.toBytes(""))
+          val labels = Bytes.toString(value)
+
+          labels.split(",").foreach(label => {
+            rs += ResultMsg("02", label match {
+              case "10" => "02" // 携程
+              case "11" => "04" // 去哪儿
+              case "12" => "03" // 12308
+              case "15" => "01" // 同程网
+              case _ => "05"
+            })
+
+          })
+
+        } else {
+          rs += ResultMsg("01", "01")
+        }
+      }
+      // 返回结果
+      returnMsg(rs)
     }
   }
 
   /**
     * 支付完成风险验证
+    *
+    * 1.白名单用户
+    * 2.支付账号是否代购账号
     *
     * @param payReturn 支付完成参数
     * @return 返回风险评估结果
@@ -219,13 +307,81 @@ class BackendServiceActor extends Actor with ActorLogging {
   private[service] def payReturnValid(payReturn: PayReturn): Try[ReturnMsg] = {
     Try {
       val rs = ArrayBuffer.empty[ResultMsg]
-      rs += ResultMsg("riskClass_".concat(payReturn.orderId), "riskLevelId_1".concat(payReturn.orderId))
-      ReturnMsg("0", "测试用例", rs)
+      //  1.白名单用户
+      if (!checkWhiteList(payReturn.userId)) {
+        //  2.支付账号是否代购账号(添加过滤条件)
+        val get = abnormalPayIdList.getGet(payReturn.buyerEmail).setFilter(abnormalFilter)
+        if (abnormalPayIdList.table.exists(get)) {
+
+          val value = abnormalPayIdList.get(get).getValue(Bytes.toBytes("p"), Bytes.toBytes("type"))
+          val idType = Bytes.toString(value)
+
+          rs += ResultMsg("02", idType match {
+            case "1" => "02" // 携程
+            case "2" => "04" // 去哪儿
+            case "3" => "03" // 12308
+            case "6" => "01" // 同程网
+            case _ => "05"
+          })
+
+        } else {
+          rs += ResultMsg("01", "01")
+        }
+      }
+
+      // 返回结果
+      returnMsg(rs)
     }
   }
 
   private[service] def checkWhiteList(userId: String): Boolean = {
-    // TODO
-    true
+    // 目前白名单只针对USER_ID
+    val info = redisClient.get("WHITE_1_".concat(userId))
+    info match {
+      case Some(json) =>
+
+        val whiteJson = parse(json)
+        val isUserId = (whiteJson \ "infoType").extract[String] == "1"
+        val ectFlag = (whiteJson \ "ectFlag").extract[String] == "Y"
+        val effected = effectTime((whiteJson \ "stDate").extract[String], (whiteJson \ "enDate").extract[String])
+
+        ectFlag && effected && isUserId
+      case None => false
+    }
+  }
+
+  /**
+    * 返回值数据处理
+    *
+    * @param rs 结果集
+    * @return 封装结果返回
+    */
+  private[service] def returnMsg(rs: ArrayBuffer[ResultMsg]): ReturnMsg = {
+    if (rs.isEmpty) {
+      rs += ResultMsg("01", "01")
+    }
+    ReturnMsg("0", "成功返回", rs)
+  }
+
+  /**
+    * SingleColumnValueFilter
+    *
+    * @param cf       列族
+    * @param c        列名
+    * @param operator 操作 [[org.apache.hadoop.hbase.filter.CompareFilter.CompareOp]]
+    * @param value    要过滤的值
+    * @return
+    */
+  private[service] def scvf(cf: String, c: String, operator: CompareOp, value: String): SingleColumnValueFilter = {
+    new SingleColumnValueFilter(
+      Bytes.toBytes(cf),
+      Bytes.toBytes(c),
+      operator,
+      Bytes.toBytes(value)
+    )
+  }
+
+  private[service] def effectTime(start: String, end: String): Boolean = {
+    (DateTime.now().getMillis > start.getMillis) && (DateTime.now().getMillis < end.getMillis)
   }
 }

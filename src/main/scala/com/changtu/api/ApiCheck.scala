@@ -65,7 +65,7 @@ object ApiCheck extends App with Logging {
       logger.info("restarting flower host : ".concat(host))
       ssh("ps -ef | grep com.changtu.api.ApiBoot | grep 9993 | grep -v grep | awk '{print $2}' | xargs kill")
       Thread.sleep(1000)
-      ssh("nohup java -Djava.ext.dirs=/appl/scripts/e-business/rest/target/lib -classpath /appl/scripts/e-business/rest/target/rest-1.0-SNAPSHOT.jar com.changtu.api.ApiBoot ".concat(host).concat(" 9993 > /appl/scripts/e-business/rest/out.follower.$$.log 2>&1 &"))
+      ssh("nohup java -Djava.ext.dirs=/appl/scripts/e-business/rest/target/lib -classpath /appl/scripts/e-business/rest/target/rest-1.1.jar com.changtu.api.ApiBoot ".concat(host).concat(" 9993 > /appl/scripts/e-business/rest/out.follower.$$.log 2>&1 &"))
       //ssh("nohup")
     })
 
@@ -93,7 +93,7 @@ object ApiCheck extends App with Logging {
       logger.info("restarting flower host : ".concat(host))
       ssh("ps -ef | grep com.changtu.service.BackendServiceBoot | grep 4444 | grep -v grep | awk '{print $2}' | xargs kill")
       Thread.sleep(500)
-      ssh("nohup java -Djava.ext.dirs=/appl/scripts/e-business/rest/target/lib -classpath /appl/scripts/e-business/rest/target/rest-1.0-SNAPSHOT.jar com.changtu.service.BackendServiceBoot 4444 > /appl/scripts/e-business/rest/out.follower.$$.log 2>&1 &")
+      ssh("nohup java -Djava.ext.dirs=/appl/scripts/e-business/rest/target/lib -classpath /appl/scripts/e-business/rest/target/rest-1.1.jar com.changtu.service.BackendServiceBoot 4444 > /appl/scripts/e-business/rest/out.follower.$$.log 2>&1 &")
       //ssh("nohup")
     })
   }
