@@ -203,11 +203,11 @@ class BackendServiceActor extends Actor with ActorLogging {
 
           labels.split(",").foreach(label => {
             rs += ResultMsg("02", label match {
-              case "10" => "02" // 携程
-              case "11" => "04" // 去哪儿
-              case "12" => "03" // 12308
-              case "15" => "01" // 同程网
-              case _ => "05"
+              case "10" => "03" // 携程
+              case "11" => "05" // 去哪儿
+              case "12" => "04" // 12308
+              case "15" => "02" // 同程网
+              case _ => "06"
             })
           })
         } else {
@@ -243,7 +243,7 @@ class BackendServiceActor extends Actor with ActorLogging {
         val end = blackList.get(get).getValue(Bytes.toBytes("p"), Bytes.toBytes("en"))
 
         // 判断是否在生效时间内
-        if (effectTime(Bytes.toString(start), Bytes.toString(end))) rs += ResultMsg("03", "01")
+        if (effectTime(Bytes.toString(start), Bytes.toString(end))) rs += ResultMsg("03", "08")
 
       } else {
         rs += ResultMsg("01", "01")
@@ -277,11 +277,11 @@ class BackendServiceActor extends Actor with ActorLogging {
 
           labels.split(",").foreach(label => {
             rs += ResultMsg("02", label match {
-              case "10" => "02" // 携程
-              case "11" => "04" // 去哪儿
-              case "12" => "03" // 12308
-              case "15" => "01" // 同程网
-              case _ => "05"
+              case "10" => "03" // 携程
+              case "11" => "05" // 去哪儿
+              case "12" => "04" // 12308
+              case "15" => "02" // 同程网
+              case _ => "06"
             })
 
           })
@@ -317,11 +317,11 @@ class BackendServiceActor extends Actor with ActorLogging {
           val idType = Bytes.toString(value)
 
           rs += ResultMsg("02", idType match {
-            case "1" => "02" // 携程
-            case "2" => "04" // 去哪儿
-            case "3" => "03" // 12308
-            case "6" => "01" // 同程网
-            case _ => "05"
+            case "1" => "03" // 携程
+            case "2" => "05" // 去哪儿
+            case "3" => "04" // 12308
+            case "6" => "02" // 同程网
+            case _ => "06"
           })
 
         } else {
