@@ -1,7 +1,6 @@
 package com.changtu.api
 
 import java.io.File
-import java.net.InetAddress
 
 import akka.actor.{ActorSystem, Props}
 import akka.io.IO
@@ -11,6 +10,7 @@ import spray.can.Http
 
 import scala.concurrent.duration
 import duration._
+import scala.language.postfixOps
 object ApiBoot extends App {
 
   if (args.length < 2) {
@@ -20,7 +20,7 @@ object ApiBoot extends App {
 
   val Array(hostname, port) = args
 
-  val seedHost = InetAddress.getLocalHost.getHostAddress
+  //val seedHost = InetAddress.getLocalHost.getHostAddress
 
 
   implicit val timeout = Timeout(5 seconds)
@@ -35,7 +35,7 @@ object ApiBoot extends App {
       }
       remote {
         netty.tcp {
-          hostname = "$seedHost"
+          hostname = "$hostname"
           port = "2551"
         }
       }

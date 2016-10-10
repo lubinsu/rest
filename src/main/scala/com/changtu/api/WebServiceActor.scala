@@ -18,6 +18,7 @@ import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
 import scala.util.{Failure, Success}
 
+
 /**
   * Web Server
   */
@@ -34,6 +35,7 @@ class WebServiceActor extends Actor with HttpService with ActorLogging {
 
   val actorRefFactory = context
   val mediator = DistributedPubSubExtension(context.system).mediator
+
   implicit val ec = ExecutionContext.Implicits.global
 
   val route =

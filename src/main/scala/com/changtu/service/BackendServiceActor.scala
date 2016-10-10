@@ -41,9 +41,19 @@ class BackendServiceActor extends Actor with ActorLogging {
   // 时间格式隐式转换
   val formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
   val redisClient = new RedisUtils("redis.server.test.1")
+
   implicit def str2date(str: String): DateTime = DateTime.parse(str, formatter)
 
   val mediator = DistributedPubSubExtension(context.system).mediator
+  /*val cluster = Cluster(context.system)
+
+  override def preStart(): Unit = {
+    cluster.subscribe(self, initialStateMode = InitialStateAsEvents,
+
+      classOf[MemberUp], classOf[MemberRemoved], classOf[UnreachableMember])
+
+  }*/
+
   // 创建redis连接
   //val r = new RedisClient("172.19.3.62", 45001)
   //创建HBASE连接
@@ -281,7 +291,7 @@ class BackendServiceActor extends Actor with ActorLogging {
               case "11" => "05" // 去哪儿
               case "12" => "04" // 12308
               case "15" => "02" // 同程网
-              case _ => "06"
+              case _ => "06"    // 未知代购
             })
 
           })
@@ -308,7 +318,7 @@ class BackendServiceActor extends Actor with ActorLogging {
     Try {
       val rs = ArrayBuffer.empty[ResultMsg]
       //  1.白名单用户
-      if (!checkWhiteList(payReturn.userId)) {
+      if (!checkWhiteList(payReturn.userId) & payReturn.buyerEmail.length > 0) {
         //  2.支付账号是否代购账号(添加过滤条件)
         val get = abnormalPayIdList.getGet(payReturn.buyerEmail).setFilter(abnormalFilter)
         if (abnormalPayIdList.table.exists(get)) {
@@ -321,7 +331,7 @@ class BackendServiceActor extends Actor with ActorLogging {
             case "2" => "05" // 去哪儿
             case "3" => "04" // 12308
             case "6" => "02" // 同程网
-            case _ => "06"
+            case _ => "06"   // 未知代购
           })
 
         } else {

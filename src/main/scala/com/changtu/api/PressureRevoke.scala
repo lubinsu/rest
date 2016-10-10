@@ -35,7 +35,8 @@ object PressureRevoke extends App with Logging {
   val pipeline = sendReceive ~> unmarshal[ReturnMsg]
   var cnt = 0
 
-  logger.info("[START]".concat(DateTime.now.toString("yyyy-MM-dd HH:mm:ss:SSS")))
+  val startT = DateTime.now
+  logger.warn("[START]".concat(DateTime.now.toString("yyyy-MM-dd HH:mm:ss:SSS")))
   for (a <- 1.toLong to args(0).toLong) {
 
     cnt % 2000 match {
@@ -95,7 +96,9 @@ object PressureRevoke extends App with Logging {
   def count(): Unit = {
     cnt += 1
     if(cnt == args(0).toLong) {
-      logger.info("[END]".concat(DateTime.now.toString("yyyy-MM-dd HH:mm:ss:SSS")))
+      logger.warn("[END]".concat(DateTime.now.toString("yyyy-MM-dd HH:mm:ss:SSS")))
+      logger.warn("[ELAPSED(SECONDS)]".concat(((DateTime.now().getMillis - startT.getMillis) / 1000).toString))
+
       shutdown()
     }
   }

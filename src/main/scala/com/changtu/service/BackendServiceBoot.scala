@@ -11,6 +11,7 @@ import scala.concurrent.duration._
 
 /**
   * Pass in the port as first argument so that we can run many backend services
+  *
   */
 object BackendServiceBoot extends App {
 
